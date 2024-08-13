@@ -14,7 +14,7 @@ import { debounce } from 'lodash';
 
 export function HomePage() {
 	const [searchValue, setSearchValue] = React.useState('');
-	const [sortBy, setSortBy] = React.useState('price');
+	const [sortBy, setSortBy] = React.useState('title');
 	const [currentPage, setCurrentPage] = React.useState(1);
 	const [totalPages, setTotalPages] = React.useState(1);
 	const [items, setItems] = React.useState([]);
@@ -142,7 +142,7 @@ export function HomePage() {
 			)}
 
 			{!isLoading && (
-				<div style={{ marginBottom: 30 }}>
+				<div>
 					<SimpleGrid cols={isSmallScreen ? 1 : 3}>
 						{items.map((item) => (
 							<ProductCard
