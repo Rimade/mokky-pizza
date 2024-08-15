@@ -14,13 +14,13 @@ import { debounce } from 'lodash';
 
 export function HomePage() {
 	const [searchValue, setSearchValue] = React.useState('');
-	const [sortBy, setSortBy] = React.useState('title');
+	const [inputValue, setInputValue] = React.useState('');
+	const [sortBy, setSortBy] = React.useState('-title');
 	const [currentPage, setCurrentPage] = React.useState(1);
 	const [totalPages, setTotalPages] = React.useState(1);
 	const [items, setItems] = React.useState([]);
 	const [isLoading, setLoading] = React.useState(false);
 	const [isReady, setReady] = React.useState(false);
-	const [inputValue, setInputValue] = React.useState('');
 
 	const debouncedSearch = React.useMemo(
 		() =>
@@ -35,7 +35,8 @@ export function HomePage() {
 		debouncedSearch(value);
 	}
 
-	const isSmallScreen = useMediaQuery('(max-width: 768px)');
+	const isSmallScreen = useMediaQuery('(max-width: 576px)');
+	const isTabletScreen = useMediaQuery('(max-width:  968px)');
 
 	React.useEffect(() => {
 		const fetchItems = async () => {
@@ -97,7 +98,8 @@ export function HomePage() {
 				style={{
 					display: 'grid',
 					marginTop: 20,
-					gridTemplateColumns: isSmallScreen ? '1fr' : '1fr 0.4fr',
+					gridTemplateColumns:
+						isSmallScreen || isTabletScreen ? '1fr' : '1fr 0.4fr',
 					gap: 20,
 				}}>
 				<TextInput
@@ -143,7 +145,9 @@ export function HomePage() {
 
 			{!isLoading && (
 				<div>
-					<SimpleGrid cols={isSmallScreen ? 1 : 3}>
+					<SimpleGrid
+						cols={isSmallScreen ? 1 : isTabletScreen ? 2 : 3}
+						spacing="lg">
 						{items.map((item) => (
 							<ProductCard
 								key={item.id}
