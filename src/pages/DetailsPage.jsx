@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
 	Container,
@@ -18,18 +18,18 @@ import * as Api from '../api';
 const categories = ['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
 export function DetailsPage() {
-	const params = useParams();
-	const [loading, setLoading] = React.useState(true);
-	const [pizza, setPizza] = React.useState(null);
-	const [selectedSize, setSelectedSize] = React.useState(0);
+	const { id } = useParams();
+	const [loading, setLoading] = useState(true);
+	const [pizza, setPizza] = useState(null);
+	const [selectedSize, setSelectedSize] = useState(0);
 
 	const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const fetchPizza = async () => {
 			try {
-				const json = await Api.getOnePizza(params.id);
-				setPizza(json);
+				const response = await Api.getOnePizza(id);
+				setPizza(response);
 			} catch (error) {
 				console.error(error);
 			} finally {
@@ -37,7 +37,7 @@ export function DetailsPage() {
 			}
 		};
 		fetchPizza();
-	}, [params.id]);
+	}, [id]);
 
 	const handleSizeSelect = (size) => {
 		setSelectedSize(size);

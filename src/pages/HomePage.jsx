@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	SimpleGrid,
 	Pagination,
@@ -13,14 +13,14 @@ import { ProductCard } from '../components/ProductCard';
 import { debounce } from 'lodash';
 
 export function HomePage() {
-	const [searchValue, setSearchValue] = React.useState('');
-	const [inputValue, setInputValue] = React.useState('');
-	const [sortBy, setSortBy] = React.useState('-title');
-	const [currentPage, setCurrentPage] = React.useState(1);
-	const [totalPages, setTotalPages] = React.useState(1);
-	const [items, setItems] = React.useState([]);
-	const [isLoading, setLoading] = React.useState(false);
-	const [isReady, setReady] = React.useState(false);
+	const [searchValue, setSearchValue] = useState('');
+	const [inputValue, setInputValue] = useState('');
+	const [sortBy, setSortBy] = useState('-title');
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
+	const [items, setItems] = useState([]);
+	const [isLoading, setLoading] = useState(false);
+	const [isReady, setReady] = useState(false);
 
 	const debouncedSearch = React.useMemo(
 		() =>
@@ -38,7 +38,7 @@ export function HomePage() {
 	const isSmallScreen = useMediaQuery('(max-width: 576px)');
 	const isTabletScreen = useMediaQuery('(max-width:  968px)');
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const fetchItems = async () => {
 			try {
 				setLoading(true);
@@ -56,7 +56,7 @@ export function HomePage() {
 					sortBy,
 					page: currentPage,
 					_select: selectedFields,
-					...(searchValue && { title: searchValue + '*' }),
+					...(searchValue && { title: '*' + searchValue }),
 				});
 
 				setItems(response.items);
@@ -149,14 +149,7 @@ export function HomePage() {
 						cols={isSmallScreen ? 1 : isTabletScreen ? 2 : 3}
 						spacing="lg">
 						{items.map((item) => (
-							<ProductCard
-								key={item.id}
-								imageUrl={item.imageUrl}
-								title={item.title}
-								price={item.price}
-								rating={item.rating}
-								id={item.id}
-							/>
+							<ProductCard key={item.id} {...item} />
 						))}
 					</SimpleGrid>
 				</div>
